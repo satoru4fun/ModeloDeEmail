@@ -54,7 +54,7 @@
               + "</li></ul><br>Para apontar para:<ul>"
 				      + dnsinterno
 				      + dnsexterno
-				      + "</ul><br><br>Atenciosamente,";
+				      + "</ul></br>";
     email_gerar(assunto, corpo);
   }
 
@@ -62,15 +62,14 @@
     var origem = document.getElementById("origem").value.trim();;
     var destino = document.getElementById("destino").value.trim();;
     var porta = document.getElementById("porta").value.trim();;
-    var porta_protocolo = "<li>Porta: " + porta + "</li>";
     if(document.getElementById("icmp").checked){ porta_protocolo = "<li>Protocolo: ICMP</li>"; }
     var assunto = "Solicitação de Liberação no Firewall - " + origem.toUpperCase() + " > " + destino.toUpperCase();
     var corpo = "Prezada(o),"
 	            + "<br><br>Solicito liberação de acesso:<ul>"
 				      + "<li>Origem: " + origem + ";</li>"
               + "<li>Destino: " + destino + ";</li>"
-              + porta_protocolo
-				      + "</ul><br><br>Atenciosamente,";
+              + "<li>Porta: " + porta + ".</li>";
+				      + "</ul></br>";
     if(origem && destino){
       email_gerar(assunto, corpo);
     }
@@ -100,7 +99,7 @@
               + " pela AMcom possui formação superior completa e " + experiencia
               + ".<br><br>Observações:<ul><li>"
               + observacoes
-				      + "</li></ul><br><br>Atenciosamente,";
+				      + "</li></ul></br>";
     if(pronome && cargo && aprovacao){
       email_gerar(assunto, corpo, "none");
     }
