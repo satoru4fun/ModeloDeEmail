@@ -10,14 +10,14 @@
       <div class="container border rounded p-3 mb-3 bg-dark text-white">
         <div class="form-group">
           <label for="tipo" class="font-weight-bold">Tipo de modelo</label>
-          <select name="tipo" id="tipo" onclick="escolher();" onkeyup="escolher();" class="form-control">
+          <select name="tipo" id="tipo" v-on:click="escolher" class="form-control">
             <option value="" disabled selected hidden>Escolha o tipo de modelo</option>
             <option v-for="opcao in opcoes" v-bind:value="opcao.id">{{opcao.nome}}</option>
           </select>
         </div>
       </div>
-  
-      <div id="dns_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
+      
+      <div v-show="exibirDNS" id="dns_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="cname">CNAME:</label>
           <input type="text" id="cname" name="cname" class="form-control" onkeyup="dns_gerar();">
@@ -47,7 +47,7 @@
         </div>
       </div>
     
-      <div id="firewall_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
+      <div v-show="exibirFirewall" id="firewall_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="origem">Origem:</label>
           <input type="text" id="origem" name="origem" class="form-control" onkeyup="firewall_gerar();">
@@ -67,7 +67,7 @@
         </div>
       </div>
     
-      <div id="res_diligencia_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
+      <div v-show="exibirResultadoDiligencia" id="res_diligencia_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="pronome">Gênero:</label>
           <select name="pronome" id="pronome" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
@@ -108,7 +108,7 @@
         </div>
       </div>
     
-      <div id="convite_github_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
+      <div v-show="exibirConviteGitHub" id="convite_github_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <button class="button" onclick="convite_github_gerar();">Ok</button>
         </div>

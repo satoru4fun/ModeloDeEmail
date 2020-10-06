@@ -19,23 +19,37 @@ var app = new Vue({
                 nome: 'Convite Github'
             }
         ],
-        escolhaDNS: {
-            id: 'dns',
-            nome: 'DNS'
+        opcaoEscolhida: '',
+        exibirDNS: false,
+        exibirFirewall: false,
+        exibirResultadoDiligencia: false,
+        exibirConviteGitHub: false
+    },
+    methods: {
+        escolher: function() {
+            this.exibir(document.getElementById("tipo").value);
         },
-        escolhaFirewall: {
-            id: 'firewall',
-            nome: 'Firewall'
-        },
-        escolhaRespostaDiligencia: {
-            id: 'res_diligencia',
-            nome: 'Resultado de Diligência'
-        },
-        escolhaConviteGitHub: {
-            id: 'convite_github',
-            nome: 'Convite Github'
-        },
-        opcaoEscolhida: ''
+        exibir: function(opcao) {
+            this.exibirDNS = false;
+            this.exibirFirewall = false;
+            this.exibirResultadoDiligencia = false;
+            this.exibirConviteGitHub = false;
+            switch(opcao) {
+                case 'dns':
+                    this.exibirDNS = true;
+                    break;
+                case 'firewall':
+                    this.exibirFirewall = true;
+                    break;
+                case 'res_diligencia':
+                    this.exibirResultadoDiligencia = true;
+                    break;
+                case 'convite_github':
+                    this.exibirConviteGitHub = true;
+                    break;
+            }
+
+        }
     }
   })
 
@@ -48,26 +62,7 @@ function saudacao(){
     else               { return "Boa noite" }
   }
 
-  // Esconde o elemento informado
-  function esconder(elemento){
-    document.getElementById(elemento).style.display = "none";
-  }
-
-  // Mostra na tela o elemento informado
-  function mostrar(elemento){
-    document.getElementById(elemento).style.display = "block";
-  }
-
-  // Mostra o formulário escolhido e esconde os outros
-  function escolher(){
-    var escolha = document.getElementById("tipo").value;
-    esconder("dns_form");
-    esconder("firewall_form");
-    esconder("res_diligencia_form");
-    esconder("convite_github_form");
-    esconder("resultado");
-    mostrar(escolha + "_form");
-  }
+  
 
   function dns_gerar(){
     var cname = document.getElementById("cname").value.trim();
