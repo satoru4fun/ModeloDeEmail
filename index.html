@@ -20,49 +20,49 @@
       <div v-show="exibirDNS" id="dns_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="cname">CNAME:</label>
-          <input type="text" id="cname" name="cname" class="form-control" onkeyup="dns_gerar();">
+          <input type="text" id="cname" name="cname" class="form-control" v-on:keyup="dns_gerar">
         </div>
         <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="hom" checked onclick="dns_gerar();">
+          <input type="checkbox" class="form-check-input" id="hom" checked v-on:keyup="dns_gerar">
           <label class="form-check-label" for="hom">Hom</label>
         </div>
         <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="dev" checked onclick="dns_gerar();">
+          <input type="checkbox" class="form-check-input" id="dev" checked v-on:keyup="dns_gerar">
           <label class="form-check-label" for="dev">Dev</label>
         </div>
         <div class="form-group">
           <label for="subdomain">Subdomínio:</label>
           <input type="text" id="subdomain" name="subdomain" class="form-control" 
-                value="sme.prefeitura.sp.gov.br" onkeyup="dns_gerar();">
+                value="sme.prefeitura.sp.gov.br" v-on:keyup="dns_gerar">
         </div>
         <div class="form-group">
           <label for="dnsinterno">DNS interno:</label>
           <input type="text" id="dnsinterno" name="dnsinterno" class="form-control" 
-                value="10.50.1.189" onkeyup="dns_gerar();">
+                value="10.50.1.189" v-on:keyup="dns_gerar">
         </div>
         <div class="form-group">
           <label for="dnsexterno">DNS externo:</label>
           <input type="text" id="dnsexterno" name="dnsexterno" class="form-control" 
-                value="186.239.235.118" onkeyup="dns_gerar();">
+                value="186.239.235.118" v-on:keyup="dns_gerar">
         </div>
       </div>
     
       <div v-show="exibirFirewall" id="firewall_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="origem">Origem:</label>
-          <input type="text" id="origem" name="origem" class="form-control" onkeyup="firewall_gerar();">
+          <input type="text" id="origem" name="origem" class="form-control" v-on:keyup="firewall_gerar">
         </div>
         <div class="form-group">
           <label for="destino">Destino:</label>
-          <input type="text" id="destino" name="destino" class="form-control" onkeyup="firewall_gerar();">
+          <input type="text" id="destino" name="destino" class="form-control" v-on:keyup="firewall_gerar">
         </div>
         <div class="form-group">
           <label for="porta">Porta/Protocolo:</label>
           <input type="text" id="porta" name="porta" class="form-control" 
-                placeholder="Ex.: 80 TCP/UDP e 443 TCP/UDP" onkeyup="firewall_gerar();">
+                placeholder="Ex.: 80 TCP/UDP e 443 TCP/UDP" v-on:keyup="firewall_gerar">
         </div>
         <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="icmp" onclick="firewall_gerar();">
+          <input type="checkbox" class="form-check-input" id="icmp" v-on:keyup="firewall_gerar">
           <label class="form-check-label" for="icmp">ICMP</label>
         </div>
       </div>
@@ -70,7 +70,7 @@
       <div v-show="exibirResultadoDiligencia" id="res_diligencia_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="pronome">Gênero:</label>
-          <select name="pronome" id="pronome" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
+          <select name="pronome" id="pronome" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control">
             <option value="o(a)" selected disabled hidden>Selecione</option>
             <option value="o">Masculino</option>
             <option value="a">Feminino</option>
@@ -78,7 +78,7 @@
         </div>
         <div class="form-group">
           <label for="cargo">Perfil:</label>
-          <select name="cargo" id="cargo" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
+          <select name="cargo" id="cargo" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control">
             <option value="" selected disabled hidden>Selecione</option>
             <option value="gp">Gerente de Projetos</option>
             <option value="sm">Scrum Master</option>
@@ -95,7 +95,7 @@
         </div>
         <div class="form-group">
           <label for="aprovacao">Resultado:</label>
-          <select name="aprovacao" id="aprovacao" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
+          <select name="aprovacao" id="aprovacao" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control">
             <option value="" selected disabled hidden>Selecione</option>
             <option value="satisfatório">Satisfatório</option>
             <option value="não satisfatório">Não satisfatório</option>
@@ -104,13 +104,13 @@
         <div class="form-group">
           <label for="observacoes">Observações:</label>
           <input type="text" id="observacoes" name="observacoes" class="form-control"
-                value="A DPC não dispensa da apresentação dos documentos comprobatórios." onkeyup="res_diligencia_gerar();">
+                value="A DPC não dispensa da apresentação dos documentos comprobatórios." v-on:keyup="res_diligencia_gerar">
         </div>
       </div>
     
       <div v-show="exibirConviteGitHub" id="convite_github_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
-          <button class="button" onclick="convite_github_gerar();">Ok</button>
+          <button class="button" v-on:click="convite_github_gerar">Ok</button>
         </div>
       </div>
     
