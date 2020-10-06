@@ -10,7 +10,7 @@
       <div class="container border rounded p-3 mb-3 bg-dark text-white">
         <div class="form-group">
           <label for="tipo" class="font-weight-bold">Tipo de modelo</label>
-          <select name="tipo" id="tipo" v-on:click="escolher" class="form-control">
+          <select name="tipo" id="tipo" v-on:click="escolher" class="form-control" v-model="modeloOpcaoSelecionada">
             <option value="" disabled selected hidden>Escolha o tipo de modelo</option>
             <option v-for="opcao in opcoes" v-bind:value="opcao.id">{{opcao.nome}}</option>
           </select>
@@ -20,49 +20,49 @@
       <div v-show="exibirDNS" id="dns_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="cname">CNAME:</label>
-          <input type="text" id="cname" name="cname" class="form-control" v-on:keyup="dns_gerar">
+          <input type="text" id="cname" name="cname" class="form-control" v-on:keyup="dns_gerar" v-model="modeloFormularioDNS.cname">
         </div>
         <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="hom" checked v-on:keyup="dns_gerar">
+          <input type="checkbox" class="form-check-input" id="hom" v-on:change="dns_gerar" v-model="modeloFormularioDNS.homologacaoChecado">
           <label class="form-check-label" for="hom">Hom</label>
         </div>
         <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="dev" checked v-on:keyup="dns_gerar">
+          <input type="checkbox" class="form-check-input" id="dev" v-on:change="dns_gerar" v-model="modeloFormularioDNS.desenvolvimentoChecado">
           <label class="form-check-label" for="dev">Dev</label>
         </div>
         <div class="form-group">
           <label for="subdomain">Subdomínio:</label>
           <input type="text" id="subdomain" name="subdomain" class="form-control" 
-                value="sme.prefeitura.sp.gov.br" v-on:keyup="dns_gerar">
+                v-on:keyup="dns_gerar" v-model="modeloFormularioDNS.subdomain">
         </div>
         <div class="form-group">
           <label for="dnsinterno">DNS interno:</label>
           <input type="text" id="dnsinterno" name="dnsinterno" class="form-control" 
-                value="10.50.1.189" v-on:keyup="dns_gerar">
+                v-on:keyup="dns_gerar" v-model="modeloFormularioDNS.DNSInterno">
         </div>
         <div class="form-group">
           <label for="dnsexterno">DNS externo:</label>
           <input type="text" id="dnsexterno" name="dnsexterno" class="form-control" 
-                value="186.239.235.118" v-on:keyup="dns_gerar">
+                v-on:keyup="dns_gerar" v-model="modeloFormularioDNS.DNSExterno">
         </div>
       </div>
     
       <div v-show="exibirFirewall" id="firewall_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="origem">Origem:</label>
-          <input type="text" id="origem" name="origem" class="form-control" v-on:keyup="firewall_gerar">
+          <input type="text" id="origem" name="origem" class="form-control" v-on:keyup="firewall_gerar" v-model="modeloFormularioFirewall.origem">
         </div>
         <div class="form-group">
           <label for="destino">Destino:</label>
-          <input type="text" id="destino" name="destino" class="form-control" v-on:keyup="firewall_gerar">
+          <input type="text" id="destino" name="destino" class="form-control" v-on:keyup="firewall_gerar" v-model="modeloFormularioFirewall.destino">
         </div>
         <div class="form-group">
           <label for="porta">Porta/Protocolo:</label>
           <input type="text" id="porta" name="porta" class="form-control" 
-                placeholder="Ex.: 80 TCP/UDP e 443 TCP/UDP" v-on:keyup="firewall_gerar">
+                placeholder="Ex.: 80 TCP/UDP e 443 TCP/UDP" v-on:keyup="firewall_gerar" v-model="modeloFormularioFirewall.portaProtocolo">
         </div>
         <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="icmp" v-on:keyup="firewall_gerar">
+          <input type="checkbox" class="form-check-input" id="icmp" v-on:change="firewall_gerar" v-model="modeloFormularioFirewall.ICMPChecado">
           <label class="form-check-label" for="icmp">ICMP</label>
         </div>
       </div>

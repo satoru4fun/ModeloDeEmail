@@ -3,31 +3,54 @@ var app = new Vue({
     data: {
         opcoes: [
             {
-                id: 'dns',
+                id: 1,
                 nome: 'DNS'
             },
             {
-                id: 'firewall',
+                id: 2,
                 nome: 'Firewall'
             },
             {
-                id: 'res_diligencia',
+                id: 3,
                 nome: 'Resultado de Diligência'
             },
             {
-                id: 'convite_github',
+                id: 4,
                 nome: 'Convite Github'
             }
         ],
-        opcaoEscolhida: '',
         exibirDNS: false,
         exibirFirewall: false,
         exibirResultadoDiligencia: false,
-        exibirConviteGitHub: false
+        exibirConviteGitHub: false,
+        modeloOpcaoSelecionada: '',
+        modeloFormularioDNS: {
+            cname: '',
+            subdomain: 'sme.prefeitura.sp.gov.br',
+            homologacaoChecado: true,
+            desenvolvimentoChecado: true,
+            DNSInterno: '10.50.1.189',
+            DNSExterno: '186.239.235.118'
+        },
+        homologacao: '',
+        desenvolvimento: '',
+        DNSInterno: '',
+        DNSExterno: '',
+        modeloFormularioFirewall: {
+            origem: '',
+            destino: '',
+            porta: '',
+            ICMPChecado: false,
+            portaProtocolo: ''
+        },
+        modeloEmail: {
+            assunto: '',
+            corpo: ''
+        }
     },
     methods: {
         escolher: function() {
-            this.exibir(document.getElementById("tipo").value);
+            this.exibir(this.modeloOpcaoSelecionada);
         },
         exibir: function(opcao) {
             this.exibirDNS = false;
@@ -35,58 +58,53 @@ var app = new Vue({
             this.exibirResultadoDiligencia = false;
             this.exibirConviteGitHub = false;
             switch(opcao) {
-                case 'dns':
+                case 1:
                     this.exibirDNS = true;
                     break;
-                case 'firewall':
+                case 2:
                     this.exibirFirewall = true;
                     break;
-                case 'res_diligencia':
+                case 3:
                     this.exibirResultadoDiligencia = true;
                     break;
-                case 'convite_github':
+                case 4:
                     this.exibirConviteGitHub = true;
                     break;
             }
 
         },
-        dns_gerar: function (){
-            var cname = document.getElementById("cname").value.trim();
-            var subdomain = document.getElementById("subdomain").value.trim();
-            var hom = ",</li><li>\"hom-" + cname + "\" no subdomínio \"" + subdomain + "\"";
-            var dev = ",</li><li>\"dev-" + cname + "\" no subdomínio \"" + subdomain + "\"";
-            if(document.getElementById("hom").checked == false){ hom = ""; }
-            if(document.getElementById("dev").checked == false){ dev = ""; }
-            var dnsinterno = "<li>DNS interno = " + document.getElementById("dnsinterno").value.trim(); + "</li>";
-            var dnsexterno = "<li>DNS externo = " + document.getElementById("dnsexterno").value.trim(); + "</li>";
-            if(document.getElementById("dnsinterno").value == ""){ dnsinterno = ""; }
-            if(document.getElementById("dnsexterno").value == ""){ dnsexterno = ""; }
-            var assunto = "Solicitação de DNS - " + cname.toUpperCase();
-            var corpo = "Prezada(o),"
+        dns_gerar: function () {
+            this.homologacao = ",</li><li>\"hom-" + this.modeloFormularioDNS.cname.trim() + "\" no subdomínio \"" + this.modeloFormularioDNS.subdomain.trim() + "\"";
+            this.desenvolvimento = ",</li><li>\"dev-" + this.modeloFormularioDNS.cname.trim() + "\" no subdomínio \"" + this.modeloFormularioDNS.subdomain.trim() + "\"";
+            if(this.modeloFormularioDNS.homologacaoChecado == false){ this.homologacao = ""; }
+            if(this.modeloFormularioDNS.desenvolvimentoChecado == false){ this.desenvolvimento = ""; }
+            this.DNSInterno = "<li>DNS interno = " + this.modeloFormularioDNS.DNSInterno.trim() + "</li>";
+            this.DNSExterno = "<li>DNS externo = " + this.modeloFormularioDNS.DNSExterno.trim() + "</li>";
+            if(this.modeloFormularioDNS.DNSInterno == ""){ this.DNSInterno = ""; }
+            if(this.modeloFormularioDNS.DNSExterno == ""){ this.DNSExterno = ""; }
+            this.modeloEmail.assunto = "Solicitação de DNS - " + this.modeloFormularioDNS.cname.toUpperCase();
+            this.modeloEmail.corpo = "Prezada(o),"
                         + "<br><br>Favor alterar o CNAME:<ul>"
-                        + "<li>\"" + cname + "\" no subdomínio \"" + subdomain + "\""
-                      + hom
-                      + dev
+                        + "<li>\"" + this.modeloFormularioDNS.cname.trim() + "\" no subdomínio \"" + this.modeloFormularioDNS.subdomain.trim() + "\""
+                      + this.homologacao.trim()
+                      + this.desenvolvimento.trim()
                       + "</li></ul><br>Para apontar para:<ul>"
-                              + dnsinterno
-                              + dnsexterno
+                              + this.DNSInterno.trim()
+                              + this.DNSExterno.trim()
                               + "</ul><br>";
-            this.email_gerar(assunto, corpo);
+            this.email_gerar(this.modeloEmail.assunto, this.modeloEmail.corpo);
         },
         firewall_gerar: function (){
-            var origem = document.getElementById("origem").value.trim();;
-            var destino = document.getElementById("destino").value.trim();;
-            var porta = document.getElementById("porta").value.trim();;
-            if(document.getElementById("icmp").checked){ porta_protocolo = "<li>Protocolo: ICMP</li>"; }
-            var assunto = "Solicitação de Liberação no Firewall - " + origem.toUpperCase() + " > " + destino.toUpperCase();
-            var corpo = "Prezada(o),"
+            if(this.modeloFormularioFirewall.ICMPChecado){ this.modeloFormularioFirewall.portaProtocolo = "<li>Protocolo: ICMP</li>"; }
+            this.modeloEmail.assunto = "Solicitação de Liberação no Firewall - " + this.modeloFormularioFirewall.origem.toUpperCase() + " > " + this.modeloFormularioFirewall.destino.toUpperCase();
+            this.modeloEmail.corpo = "Prezada(o),"
                         + "<br><br>Solicito liberação de acesso:<ul>"
-                              + "<li>Origem: " + origem + ";</li>"
-                      + "<li>Destino: " + destino + ";</li>"
-                      + "<li>Porta: " + porta + ".</li>";
+                              + "<li>Origem: " + this.modeloFormularioFirewall.origem.trim() + ";</li>"
+                      + "<li>Destino: " + this.modeloFormularioFirewall.destino.trim() + ";</li>"
+                      + "<li>Porta: " + this.modeloFormularioFirewall.portaProtocolo.trim() + ".</li>";
                               + "</ul><br>";
-            if(origem && destino){
-              this.email_gerar(assunto, corpo);
+            if(this.modeloFormularioFirewall.origem && this.modeloFormularioFirewall.destino){
+              this.email_gerar(this.modeloEmail.assunto, this.modeloEmail.corpo);
             }
         },
         res_diligencia_gerar: function () {
