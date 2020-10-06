@@ -1,3 +1,9 @@
+var app = new Vue({
+    el: '#app',
+    data: {
+    }
+  })
+
 // Define a saudação do e-mail baseado no período do dia
 function saudacao(){
     var d = new Date();
