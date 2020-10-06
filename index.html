@@ -1,283 +1,164 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Gerador de e-mail</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<script>
-
-  // Define a saudação do e-mail baseado no período do dia
-  function saudacao(){
-    var d = new Date();
-    var horas = d.getHours();
-    if     (horas < 12){ return "Bom dia" }
-    else if(horas < 19){ return "Boa tarde" }
-    else               { return "Boa noite" }
-  }
-
-  // Esconde o elemento informado
-  function esconder(elemento){
-    document.getElementById(elemento).style.display = "none";
-  }
-
-  // Mostra na tela o elemento informado
-  function mostrar(elemento){
-    document.getElementById(elemento).style.display = "block";
-  }
-
-  // Mostra o formulário escolhido e esconde os outros
-  function escolher(){
-    var escolha = document.getElementById("tipo").value;
-    esconder("dns_form");
-    esconder("firewall_form");
-    esconder("res_diligencia_form");
-    esconder("convite_github_form");
-    esconder("resultado");
-    mostrar(escolha + "_form");
-  }
-
-  function dns_gerar(){
-    var cname = document.getElementById("cname").value.trim();
-    var subdomain = document.getElementById("subdomain").value.trim();
-    var hom = ",</li><li>\"hom-" + cname + "\" no subdomínio \"" + subdomain + "\"";
-    var dev = ",</li><li>\"dev-" + cname + "\" no subdomínio \"" + subdomain + "\"";
-    if(document.getElementById("hom").checked == false){ hom = ""; }
-    if(document.getElementById("dev").checked == false){ dev = ""; }
-    var dnsinterno = "<li>DNS interno = " + document.getElementById("dnsinterno").value.trim(); + "</li>";
-    var dnsexterno = "<li>DNS externo = " + document.getElementById("dnsexterno").value.trim(); + "</li>";
-    if(document.getElementById("dnsinterno").value == ""){ dnsinterno = ""; }
-    if(document.getElementById("dnsexterno").value == ""){ dnsexterno = ""; }
-    var assunto = "Solicitação de DNS - " + cname.toUpperCase();
-    var corpo = "Prezada(o),"
-	            + "<br><br>Favor alterar o CNAME:<ul>"
-	            + "<li>\"" + cname + "\" no subdomínio \"" + subdomain + "\""
-              + hom
-              + dev
-              + "</li></ul><br>Para apontar para:<ul>"
-				      + dnsinterno
-				      + dnsexterno
-				      + "</ul><br>";
-    email_gerar(assunto, corpo);
-  }
-
-  function firewall_gerar(){
-    var origem = document.getElementById("origem").value.trim();;
-    var destino = document.getElementById("destino").value.trim();;
-    var porta = document.getElementById("porta").value.trim();;
-    if(document.getElementById("icmp").checked){ porta_protocolo = "<li>Protocolo: ICMP</li>"; }
-    var assunto = "Solicitação de Liberação no Firewall - " + origem.toUpperCase() + " > " + destino.toUpperCase();
-    var corpo = "Prezada(o),"
-	            + "<br><br>Solicito liberação de acesso:<ul>"
-				      + "<li>Origem: " + origem + ";</li>"
-              + "<li>Destino: " + destino + ";</li>"
-              + "<li>Porta: " + porta + ".</li>";
-				      + "</ul><br>";
-    if(origem && destino){
-      email_gerar(assunto, corpo);
-    }
-  }
-
-  function res_diligencia_gerar(){
-    var pronome = document.getElementById("pronome").value;
-    var cargo = document.getElementById("cargo").value;
-    var aprovacao = document.getElementById("aprovacao").value;
-    var observacoes = document.getElementById("observacoes").value.trim();;
-    var experiencia = "experiência na área técnica de TI ou correlatas"
-    if(cargo == "gp"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI" }
-    if(cargo == "sm"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
-    if(cargo == "uxui"){ experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
-    if(cargo == "arq"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
-    if(cargo == "prog_sr"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
-    if(cargo == "prog_pl"){ experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
-    if(cargo == "prog_jr"){ experiencia  = "mais de 2 anos de experiência profissional na área técnica de TI" }
-    if(cargo == "infra_sr"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com infraestrutura ágil" }
-    if(cargo == "infra_pl"){ experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
-    if(cargo == "dados_sr"){ experiencia  = "mais de 6 anos de experiência profissional com tecnologias de dados e bases de dados, sendo 2 anos com métodos ágeis" }
-    if(cargo == "dados_pl"){ experiencia  = "mais de 4 anos de experiência profissional com tecnologias de dados e bases de dados" }
-    var assunto = "RE: Diligência Prévia de Capacidade Técnica";
-    var corpo = saudacao() + ","
-              + "<br><br>O resultado da Diligência Prévia de Capacidade Técnica foi \"<b>" + aprovacao + "</b>\".<br><br>"
-              + pronome.toUpperCase() + " funcionári" + pronome + " indicad" + pronome
-              + " pela AMcom possui formação superior completa e " + experiencia
-              + ".<br><br>Observações:<ul><li>"
-              + observacoes
-				      + "</li></ul><br>";
-    if(pronome && cargo && aprovacao){
-      email_gerar(assunto, corpo, "none");
-    }
-  }
-
-  function convite_github_gerar() {
-    var assunto = "RE: Acesso GitHub";
-    var corpo = saudacao() + ","
-              + "<br><br>Enviado o convite para contribuir na organização do GitHub."
-              + "<br>Quando aceitar, favor, sinalizar para conceder os acessos."
-              + "<br>";
-    email_gerar(assunto, corpo, "none");
-  }
-
-  function email_gerar(assunto, corpo, cabecalho_display = "block"){
-    document.getElementById("cabecalho").style.display = cabecalho_display;
-    document.getElementById("assunto_email").innerHTML = assunto;
-	  document.getElementById("corpo_email").innerHTML = corpo;
-    document.getElementById("resultado").style.display = "block";
-  }
-
-</script>
-</head>
-<body id="body" style="margin: 30px;">
-
-  <div class="container border rounded p-3 mb-3 bg-dark text-white">
-    <div class="form-group">
-	    <label for="tipo" class="font-weight-bold">Tipo de modelo</label>
-      <select name="tipo" id="tipo" onclick="escolher();" onkeyup="escolher();" class="form-control">
-        <option value="">Escolha o tipo de modelo</option>
-        <option value="dns">DNS</option>
-        <option value="firewall">Firewall</option>
-        <option value="res_diligencia">Resultado de Diligência</option>[
-        <option value="convite_github">Convite Github</option>
-      </select>
-	  </div>
-  </div>
-
-  <div id="dns_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
-    <div class="form-group">
-      <label for="cname">CNAME:</label>
-      <input type="text" id="cname" name="cname" class="form-control" onkeyup="dns_gerar();">
-    </div>
-    <div class="form-group form-check">
-      <input type="checkbox" class="form-check-input" id="hom" checked onclick="dns_gerar();">
-      <label class="form-check-label" for="hom">Hom</label>
-    </div>
-    <div class="form-group form-check">
-      <input type="checkbox" class="form-check-input" id="dev" checked onclick="dns_gerar();">
-      <label class="form-check-label" for="dev">Dev</label>
-    </div>
-    <div class="form-group">
-	    <label for="subdomain">Subdomínio:</label>
-	    <input type="text" id="subdomain" name="subdomain" class="form-control" 
-	           value="sme.prefeitura.sp.gov.br" onkeyup="dns_gerar();">
-	  </div>
-    <div class="form-group">
-	    <label for="dnsinterno">DNS interno:</label>
-	    <input type="text" id="dnsinterno" name="dnsinterno" class="form-control" 
-	           value="10.50.1.189" onkeyup="dns_gerar();">
-    </div>
-    <div class="form-group">
-	    <label for="dnsexterno">DNS externo:</label>
-	    <input type="text" id="dnsexterno" name="dnsexterno" class="form-control" 
-	           value="186.239.235.118" onkeyup="dns_gerar();">
-	  </div>
-  </div>
-
-  <div id="firewall_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
-    <div class="form-group">
-      <label for="origem">Origem:</label>
-      <input type="text" id="origem" name="origem" class="form-control" onkeyup="firewall_gerar();">
-	  </div>
-    <div class="form-group">
-      <label for="destino">Destino:</label>
-      <input type="text" id="destino" name="destino" class="form-control" onkeyup="firewall_gerar();">
-	  </div>
-    <div class="form-group">
-      <label for="porta">Porta/Protocolo:</label>
-      <input type="text" id="porta" name="porta" class="form-control" 
-	           placeholder="Ex.: 80 TCP/UDP e 443 TCP/UDP" onkeyup="firewall_gerar();">
-    </div>
-    <div class="form-group form-check">
-      <input type="checkbox" class="form-check-input" id="icmp" onclick="firewall_gerar();">
-      <label class="form-check-label" for="icmp">ICMP</label>
-    </div>
-  </div>
-
-  <div id="res_diligencia_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
-    <div class="form-group">
-	    <label for="pronome">Gênero:</label>
-      <select name="pronome" id="pronome" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
-        <option value="o(a)" selected disabled>Selecione</option>
-        <option value="o">Masculino</option>
-        <option value="a">Feminino</option>
-      </select>
-    </div>
-    <div class="form-group">
-	    <label for="cargo">Perfil:</label>
-      <select name="cargo" id="cargo" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
-        <option value="" selected disabled>Selecione</option>
-        <option value="gp">Gerente de Projetos</option>
-        <option value="sm">Scrum Master</option>
-        <option value="arq">Arquitetura (sênior)</option>
-        <option value="uxui">Designer UX/UI (pleno)</option>
-        <option value="prog_sr">Analista/Programador Sênior</option>
-        <option value="prog_pl">Analista/Programador Pleno</option>
-        <option value="prog_jr">Analista/Programador Júnior</option>
-        <option value="infra_sr">Infra Ágil Sênior</option>
-        <option value="infra_pl">Infra Ágil Pleno</option>
-        <option value="dados_sr">Analista de Dados Sênior</option>
-        <option value="dados_pl">Analista de Dados Pleno</option>
-      </select>
-    </div>
-    <div class="form-group">
-	    <label for="aprovacao">Resultado:</label>
-      <select name="aprovacao" id="aprovacao" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
-        <option value="" selected disabled>Selecione</option>
-        <option value="satisfatório">Satisfatório</option>
-        <option value="não satisfatório">Não satisfatório</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="observacoes">Observações:</label>
-      <input type="text" id="observacoes" name="observacoes" class="form-control"
-             value="A DPC não dispensa da apresentação dos documentos comprobatórios." onkeyup="res_diligencia_gerar();">
-    </div>
-  </div>
-
-  <div id="convite_github_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
-    <div class="form-group">
-      <button class="button" onclick="convite_github_gerar();">Ok</button>
-    </div>
-  </div>
-
-  <div id="resultado" style="display: none;" class="container border rounded p-3 mb-3 bg-secondary">
-    <h4 class="mb-3 text-white">E-mail</h4>
-    <div id="cabecalho">
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Para</span>
-        </div>
-	      <div class="form-control" id="para_email">
-          suporte@sme.prefeitura.sp.gov.br
-        </div>
-	    </div>
-      <div class="input-group mb-3">
-	      <div class="input-group-prepend">
-          <span class="input-group-text">CC</span>
-        </div>
-	      <div class="form-control" id="cc_email1">
-          infraestrutura.smesp@centralit.com.br
-        </div>
-        <div class="form-control" id="cc_email2">
-          idscotic@sme.prefeitura.sp.gov.br
-        </div>
-        <div class="form-control" id="cc_email3" style="user-select: none;">
-          solicitante(s)
-        </div>
-	    </div>
-      <div class="input-group mb-3">
-	      <div class="input-group-prepend">
-          <span class="input-group-text">Assunto</span>
-        </div>
-	      <div class="form-control" id="assunto_email">
-        </div>
+  <head>
+    <title>Gerador de e-mail</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  </head>
+  <body id="body" style="margin: 30px;">
+    <div class="container border rounded p-3 mb-3 bg-dark text-white">
+      <div class="form-group">
+        <label for="tipo" class="font-weight-bold">Tipo de modelo</label>
+        <select name="tipo" id="tipo" onclick="escolher();" onkeyup="escolher();" class="form-control">
+          <option value="">Escolha o tipo de modelo</option>
+          <option value="dns">DNS</option>
+          <option value="firewall">Firewall</option>
+          <option value="res_diligencia">Resultado de Diligência</option>[
+          <option value="convite_github">Convite Github</option>
+        </select>
       </div>
     </div>
-    <div class="form-group">
-	    <!--label>Corpo:</label>-->
-	    <div class="container border rounded p-3 bg-white" id="corpo_email">
+
+    <div id="dns_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
+      <div class="form-group">
+        <label for="cname">CNAME:</label>
+        <input type="text" id="cname" name="cname" class="form-control" onkeyup="dns_gerar();">
+      </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="hom" checked onclick="dns_gerar();">
+        <label class="form-check-label" for="hom">Hom</label>
+      </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="dev" checked onclick="dns_gerar();">
+        <label class="form-check-label" for="dev">Dev</label>
+      </div>
+      <div class="form-group">
+        <label for="subdomain">Subdomínio:</label>
+        <input type="text" id="subdomain" name="subdomain" class="form-control" 
+              value="sme.prefeitura.sp.gov.br" onkeyup="dns_gerar();">
+      </div>
+      <div class="form-group">
+        <label for="dnsinterno">DNS interno:</label>
+        <input type="text" id="dnsinterno" name="dnsinterno" class="form-control" 
+              value="10.50.1.189" onkeyup="dns_gerar();">
+      </div>
+      <div class="form-group">
+        <label for="dnsexterno">DNS externo:</label>
+        <input type="text" id="dnsexterno" name="dnsexterno" class="form-control" 
+              value="186.239.235.118" onkeyup="dns_gerar();">
       </div>
     </div>
-    <!--<div class="form-group">
-      <button type="button" class="btn btn-light" onclick="enviar_email();">Enviar e-mail</button>
-    </div>-->
-  </div>
   
-</body>
+    <div id="firewall_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
+      <div class="form-group">
+        <label for="origem">Origem:</label>
+        <input type="text" id="origem" name="origem" class="form-control" onkeyup="firewall_gerar();">
+      </div>
+      <div class="form-group">
+        <label for="destino">Destino:</label>
+        <input type="text" id="destino" name="destino" class="form-control" onkeyup="firewall_gerar();">
+      </div>
+      <div class="form-group">
+        <label for="porta">Porta/Protocolo:</label>
+        <input type="text" id="porta" name="porta" class="form-control" 
+              placeholder="Ex.: 80 TCP/UDP e 443 TCP/UDP" onkeyup="firewall_gerar();">
+      </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="icmp" onclick="firewall_gerar();">
+        <label class="form-check-label" for="icmp">ICMP</label>
+      </div>
+    </div>
+  
+    <div id="res_diligencia_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
+      <div class="form-group">
+        <label for="pronome">Gênero:</label>
+        <select name="pronome" id="pronome" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
+          <option value="o(a)" selected disabled>Selecione</option>
+          <option value="o">Masculino</option>
+          <option value="a">Feminino</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cargo">Perfil:</label>
+        <select name="cargo" id="cargo" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
+          <option value="" selected disabled>Selecione</option>
+          <option value="gp">Gerente de Projetos</option>
+          <option value="sm">Scrum Master</option>
+          <option value="arq">Arquitetura (sênior)</option>
+          <option value="uxui">Designer UX/UI (pleno)</option>
+          <option value="prog_sr">Analista/Programador Sênior</option>
+          <option value="prog_pl">Analista/Programador Pleno</option>
+          <option value="prog_jr">Analista/Programador Júnior</option>
+          <option value="infra_sr">Infra Ágil Sênior</option>
+          <option value="infra_pl">Infra Ágil Pleno</option>
+          <option value="dados_sr">Analista de Dados Sênior</option>
+          <option value="dados_pl">Analista de Dados Pleno</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="aprovacao">Resultado:</label>
+        <select name="aprovacao" id="aprovacao" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
+          <option value="" selected disabled>Selecione</option>
+          <option value="satisfatório">Satisfatório</option>
+          <option value="não satisfatório">Não satisfatório</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="observacoes">Observações:</label>
+        <input type="text" id="observacoes" name="observacoes" class="form-control"
+              value="A DPC não dispensa da apresentação dos documentos comprobatórios." onkeyup="res_diligencia_gerar();">
+      </div>
+    </div>
+  
+    <div id="convite_github_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
+      <div class="form-group">
+        <button class="button" onclick="convite_github_gerar();">Ok</button>
+      </div>
+    </div>
+  
+    <div id="resultado" style="display: none;" class="container border rounded p-3 mb-3 bg-secondary">
+      <h4 class="mb-3 text-white">E-mail</h4>
+      <div id="cabecalho">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Para</span>
+          </div>
+          <div class="form-control" id="para_email">
+            suporte@sme.prefeitura.sp.gov.br
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">CC</span>
+          </div>
+          <div class="form-control" id="cc_email1">
+            infraestrutura.smesp@centralit.com.br
+          </div>
+          <div class="form-control" id="cc_email2">
+            idscotic@sme.prefeitura.sp.gov.br
+          </div>
+          <div class="form-control" id="cc_email3" style="user-select: none;">
+            solicitante(s)
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Assunto</span>
+          </div>
+          <div class="form-control" id="assunto_email">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <!--label>Corpo:</label>-->
+        <div class="container border rounded p-3 bg-white" id="corpo_email">
+        </div>
+      </div>
+      <!--<div class="form-group">
+        <button type="button" class="btn btn-light" onclick="enviar_email();">Enviar e-mail</button>
+      </div>-->
+    </div>
+
+    <script src="main.js"></script>
+   
+  </body>
 </html>
