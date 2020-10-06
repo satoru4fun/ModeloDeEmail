@@ -1,6 +1,24 @@
 var app = new Vue({
     el: '#app',
     data: {
+        opcoes: [
+            {
+                id: 'dns',
+                nome: 'DNS'
+            },
+            {
+                id: 'firewall',
+                nome: 'Firewall'
+            },
+            {
+                id: 'res_diligencia',
+                nome: 'Resultado de Diligência'
+            },
+            {
+                id: 'convite_github',
+                nome: 'Convite Github'
+            }
+        ],
         escolhaDNS: {
             id: 'dns',
             nome: 'DNS'
@@ -16,7 +34,8 @@ var app = new Vue({
         escolhaConviteGitHub: {
             id: 'convite_github',
             nome: 'Convite Github'
-        }
+        },
+        opcaoEscolhida: ''
     }
   })
 

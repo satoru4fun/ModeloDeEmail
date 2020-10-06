@@ -12,10 +12,7 @@
           <label for="tipo" class="font-weight-bold">Tipo de modelo</label>
           <select name="tipo" id="tipo" onclick="escolher();" onkeyup="escolher();" class="form-control">
             <option value="" disabled selected hidden>Escolha o tipo de modelo</option>
-            <option v-bind:value="escolhaDNS.id">{{escolhaDNS.nome}}</option>
-            <option v-bind:value="escolhaFirewall.id">{{escolhaFirewall.nome}}</option>
-            <option v-bind:value="escolhaRespostaDiligencia.id">{{escolhaRespostaDiligencia.nome}}</option>
-            <option v-bind:value="escolhaConviteGitHub.id">{{escolhaConviteGitHub.nome}}</option>
+            <option v-for="opcao in opcoes" v-bind:value="opcao.id">{{opcao.nome}}</option>
           </select>
         </div>
       </div>
