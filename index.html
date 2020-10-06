@@ -11,7 +11,7 @@
         <div class="form-group">
           <label for="tipo" class="font-weight-bold">Tipo de modelo</label>
           <select name="tipo" id="tipo" onclick="escolher();" onkeyup="escolher();" class="form-control">
-            <option value="">Escolha o tipo de modelo</option>
+            <option value="" disabled selected hidden>Escolha o tipo de modelo</option>
             <option value="dns">DNS</option>
             <option value="firewall">Firewall</option>
             <option value="res_diligencia">Resultado de Diligência</option>[
@@ -74,7 +74,7 @@
         <div class="form-group">
           <label for="pronome">Gênero:</label>
           <select name="pronome" id="pronome" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
-            <option value="o(a)" selected disabled>Selecione</option>
+            <option value="o(a)" selected disabled hidden>Selecione</option>
             <option value="o">Masculino</option>
             <option value="a">Feminino</option>
           </select>
@@ -82,7 +82,7 @@
         <div class="form-group">
           <label for="cargo">Perfil:</label>
           <select name="cargo" id="cargo" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
-            <option value="" selected disabled>Selecione</option>
+            <option value="" selected disabled hidden>Selecione</option>
             <option value="gp">Gerente de Projetos</option>
             <option value="sm">Scrum Master</option>
             <option value="arq">Arquitetura (sênior)</option>
@@ -99,7 +99,7 @@
         <div class="form-group">
           <label for="aprovacao">Resultado:</label>
           <select name="aprovacao" id="aprovacao" onclick="res_diligencia_gerar();" onkeyup="res_diligencia_gerar();" class="form-control">
-            <option value="" selected disabled>Selecione</option>
+            <option value="" selected disabled hidden>Selecione</option>
             <option value="satisfatório">Satisfatório</option>
             <option value="não satisfatório">Não satisfatório</option>
           </select>
