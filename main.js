@@ -1,7 +1,7 @@
 var app = new Vue({
     el: '#app',
     data: {
-        opcoes: [
+        selecaoModeloEmail: [
             {
                 id: 1,
                 nome: 'DNS'
@@ -43,10 +43,86 @@ var app = new Vue({
             ICMPChecado: false,
             portaProtocolo: ''
         },
+        selecaoGenero: [
+            {
+                id: 'a',
+                nome: 'Feminino'
+            },
+            {
+                id: 'o',
+                nome: 'Masculino'
+            }
+        ],
+        selecaoCargo: [
+            {
+                id: 'gp',
+                nome: 'Gerente de Projetos'
+            },
+            {
+                id: 'sm',
+                nome: 'Scrum Master'
+            },
+            {
+                id: 'arq',
+                nome: 'Arquitetura (sênior)'
+            },
+            {
+                id: 'uxui',
+                nome: 'Designer UX/UI (pleno)'
+            },
+            {
+                id: 'prog_sr',
+                nome: 'Analista/Programador Sênior'
+            },
+            {
+                id: 'prog_pl',
+                nome: 'Analista/Programador Pleno'
+            },
+            {
+                id: 'prog_jr',
+                nome: 'Analista/Programador Júnior'
+            },
+            {
+                id: 'infra_sr',
+                nome: 'Infra Ágil Sênior'
+            },
+            {
+                id: 'infra_pl',
+                nome: 'Infra Ágil Pleno'
+            },
+            {
+                id: 'dados_sr',
+                nome: 'Analista de Dados Sênior'
+            },
+            {
+                id: 'dados_pl',
+                nome: 'Analista de Dados Pleno'
+            }
+        ],
+        selecaoResultado: [
+            {
+                id: 'satisfatório',
+                nome: 'Satisfatório'
+            },
+            {
+                id: 'não satisfatório',
+                nome: 'Não satisfatório'
+            }
+        ],
+        modeloFormularioResultadoDiligencia: {
+            genero: '',
+            perfil: '',
+            experiencia: '',
+            resultado: '',
+            observacao: 'A DPC não dispensa da apresentação dos documentos comprobatórios.'
+        },
         modeloEmail: {
             assunto: '',
             corpo: ''
-        }
+        },
+        emailSuporte: 'suporte@sme.prefeitura.sp.gov.br',
+        emailInfraestruturaCentralIT: 'infraestrutura.smesp@centralit.com.br',
+        emailDISIS: 'idscotic@sme.prefeitura.sp.gov.br'
     },
     methods: {
         escolher: function() {
@@ -94,7 +170,7 @@ var app = new Vue({
                               + "</ul><br>";
             this.email_gerar(this.modeloEmail.assunto, this.modeloEmail.corpo);
         },
-        firewall_gerar: function (){
+        firewall_gerar: function () {
             if(this.modeloFormularioFirewall.ICMPChecado){ this.modeloFormularioFirewall.portaProtocolo = "<li>Protocolo: ICMP</li>"; }
             this.modeloEmail.assunto = "Solicitação de Liberação no Firewall - " + this.modeloFormularioFirewall.origem.toUpperCase() + " > " + this.modeloFormularioFirewall.destino.toUpperCase();
             this.modeloEmail.corpo = "Prezada(o),"
@@ -112,28 +188,28 @@ var app = new Vue({
             var cargo = document.getElementById("cargo").value;
             var aprovacao = document.getElementById("aprovacao").value;
             var observacoes = document.getElementById("observacoes").value.trim();;
-            var experiencia = "experiência na área técnica de TI ou correlatas"
-            if(cargo == "gp"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI" }
-            if(cargo == "sm"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
-            if(cargo == "uxui"){ experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
-            if(cargo == "arq"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
-            if(cargo == "prog_sr"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
-            if(cargo == "prog_pl"){ experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
-            if(cargo == "prog_jr"){ experiencia  = "mais de 2 anos de experiência profissional na área técnica de TI" }
-            if(cargo == "infra_sr"){ experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com infraestrutura ágil" }
-            if(cargo == "infra_pl"){ experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
-            if(cargo == "dados_sr"){ experiencia  = "mais de 6 anos de experiência profissional com tecnologias de dados e bases de dados, sendo 2 anos com métodos ágeis" }
-            if(cargo == "dados_pl"){ experiencia  = "mais de 4 anos de experiência profissional com tecnologias de dados e bases de dados" }
-            var assunto = "RE: Diligência Prévia de Capacidade Técnica";
-            var corpo = this.saudacao() + ","
-                      + "<br><br>O resultado da Diligência Prévia de Capacidade Técnica foi \"<b>" + aprovacao + "</b>\".<br><br>"
-                      + pronome.toUpperCase() + " funcionári" + pronome + " indicad" + pronome
-                      + " pela AMcom possui formação superior completa e " + experiencia
+            this.modeloFormularioResultadoDiligencia.experiencia = "experiência na área técnica de TI ou correlatas"
+            if(this.modeloFormularioResultadoDiligencia.cargo == "gp"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "sm"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "uxui"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "arq"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "prog_sr"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "prog_pl"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "prog_jr"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 2 anos de experiência profissional na área técnica de TI" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "infra_sr"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com infraestrutura ágil" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "infra_pl"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 4 anos de experiência profissional na área técnica de TI" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "dados_sr"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional com tecnologias de dados e bases de dados, sendo 2 anos com métodos ágeis" }
+            if(this.modeloFormularioResultadoDiligencia.cargo == "dados_pl"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 4 anos de experiência profissional com tecnologias de dados e bases de dados" }
+            this.modeloEmail.assunto = "RE: Diligência Prévia de Capacidade Técnica";
+            this.modeloEmail.corpo = this.saudacao() + ","
+                      + "<br><br>O resultado da Diligência Prévia de Capacidade Técnica foi \"<b>" + this.modeloFormularioResultadoDiligencia.resultado + "</b>\".<br><br>"
+                      + this.modeloFormularioResultadoDiligencia.genero.toUpperCase() + " funcionári" + this.modeloFormularioResultadoDiligencia.genero + " indicad" + this.modeloFormularioResultadoDiligencia.genero
+                      + " pela AMcom possui formação superior completa e " + this.modeloFormularioResultadoDiligencia.experiencia
                       + ".<br><br>Observações:<ul><li>"
-                      + observacoes
+                      + this.modeloFormularioResultadoDiligencia.observacao
                               + "</li></ul><br>";
-            if(pronome && cargo && aprovacao){
-              this.email_gerar(assunto, corpo, "none");
+            if(this.modeloFormularioResultadoDiligencia.genero && this.modeloFormularioResultadoDiligencia.cargo && this.modeloFormularioResultadoDiligencia.resultado){
+              this.email_gerar(this.modeloEmail.assunto, this.modeloEmail.corpo, "none");
             }
         },
         convite_github_gerar: function () {

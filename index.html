@@ -12,7 +12,7 @@
           <label for="tipo" class="font-weight-bold">Tipo de modelo</label>
           <select name="tipo" id="tipo" v-on:click="escolher" class="form-control" v-model="modeloOpcaoSelecionada">
             <option value="" disabled selected hidden>Escolha o tipo de modelo</option>
-            <option v-for="opcao in opcoes" v-bind:value="opcao.id">{{opcao.nome}}</option>
+            <option v-for="opcao in selecaoModeloEmail" v-bind:value="opcao.id">{{opcao.nome}}</option>
           </select>
         </div>
       </div>
@@ -70,41 +70,29 @@
       <div v-show="exibirResultadoDiligencia" id="res_diligencia_form" style="display: none;" class="container border rounded p-3 mb-3 bg-light">
         <div class="form-group">
           <label for="pronome">Gênero:</label>
-          <select name="pronome" id="pronome" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control">
+          <select name="pronome" id="pronome" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control" v-model="modeloFormularioResultadoDiligencia.genero">
             <option value="o(a)" selected disabled hidden>Selecione</option>
-            <option value="o">Masculino</option>
-            <option value="a">Feminino</option>
+            <option v-for="opcao in selecaoGenero" v-bind:value="opcao.id">{{opcao.nome}}</option>
           </select>
         </div>
         <div class="form-group">
           <label for="cargo">Perfil:</label>
-          <select name="cargo" id="cargo" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control">
+          <select name="cargo" id="cargo" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control" v-model="modeloFormularioResultadoDiligencia.cargo">
             <option value="" selected disabled hidden>Selecione</option>
-            <option value="gp">Gerente de Projetos</option>
-            <option value="sm">Scrum Master</option>
-            <option value="arq">Arquitetura (sênior)</option>
-            <option value="uxui">Designer UX/UI (pleno)</option>
-            <option value="prog_sr">Analista/Programador Sênior</option>
-            <option value="prog_pl">Analista/Programador Pleno</option>
-            <option value="prog_jr">Analista/Programador Júnior</option>
-            <option value="infra_sr">Infra Ágil Sênior</option>
-            <option value="infra_pl">Infra Ágil Pleno</option>
-            <option value="dados_sr">Analista de Dados Sênior</option>
-            <option value="dados_pl">Analista de Dados Pleno</option>
+            <option v-for="opcao in selecaoCargo" v-bind:value="opcao.id">{{opcao.nome}}</option>
           </select>
         </div>
         <div class="form-group">
           <label for="aprovacao">Resultado:</label>
-          <select name="aprovacao" id="aprovacao" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control">
+          <select name="aprovacao" id="aprovacao" v-on:click="res_diligencia_gerar" v-on:keyup="res_diligencia_gerar" class="form-control" v-model="modeloFormularioResultadoDiligencia.resultado">
             <option value="" selected disabled hidden>Selecione</option>
-            <option value="satisfatório">Satisfatório</option>
-            <option value="não satisfatório">Não satisfatório</option>
+            <option v-for="opcao in selecaoResultado" v-bind:value="opcao.id">{{opcao.nome}}</option>
           </select>
         </div>
         <div class="form-group">
           <label for="observacoes">Observações:</label>
           <input type="text" id="observacoes" name="observacoes" class="form-control"
-                value="A DPC não dispensa da apresentação dos documentos comprobatórios." v-on:keyup="res_diligencia_gerar">
+                v-on:keyup="res_diligencia_gerar" v-model="modeloFormularioResultadoDiligencia.observacao">
         </div>
       </div>
     
@@ -122,7 +110,7 @@
               <span class="input-group-text">Para</span>
             </div>
             <div class="form-control" id="para_email">
-              suporte@sme.prefeitura.sp.gov.br
+              {{ emailSuporte }}
             </div>
           </div>
           <div class="input-group mb-3">
@@ -130,10 +118,10 @@
               <span class="input-group-text">CC</span>
             </div>
             <div class="form-control" id="cc_email1">
-              infraestrutura.smesp@centralit.com.br
+              {{ emailInfraestruturaCentralIT }}
             </div>
             <div class="form-control" id="cc_email2">
-              idscotic@sme.prefeitura.sp.gov.br
+              {{ emailDISIS }}
             </div>
             <div class="form-control" id="cc_email3" style="user-select: none;">
               solicitante(s)
