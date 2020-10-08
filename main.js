@@ -23,6 +23,7 @@ var app = new Vue({
         exibirFirewall: false,
         exibirResultadoDiligencia: false,
         exibirConviteGitHub: false,
+        exibirEmail: false,
         modeloOpcaoSelecionada: '',
         modeloFormularioDNS: {
             cname: '',
@@ -168,7 +169,7 @@ var app = new Vue({
                               + this.DNSInterno.trim()
                               + this.DNSExterno.trim()
                               + "</ul><br>";
-            this.email_gerar(this.modeloEmail.assunto, this.modeloEmail.corpo);
+            this.email_gerar();
         },
         firewall_gerar: function () {
             if(this.modeloFormularioFirewall.ICMPChecado){ this.modeloFormularioFirewall.portaProtocolo = "<li>Protocolo: ICMP</li>"; }
@@ -180,14 +181,10 @@ var app = new Vue({
                       + "<li>Porta: " + this.modeloFormularioFirewall.portaProtocolo.trim() + ".</li>";
                               + "</ul><br>";
             if(this.modeloFormularioFirewall.origem && this.modeloFormularioFirewall.destino){
-              this.email_gerar(this.modeloEmail.assunto, this.modeloEmail.corpo);
+              this.email_gerar();
             }
         },
         res_diligencia_gerar: function () {
-            var pronome = document.getElementById("pronome").value;
-            var cargo = document.getElementById("cargo").value;
-            var aprovacao = document.getElementById("aprovacao").value;
-            var observacoes = document.getElementById("observacoes").value.trim();;
             this.modeloFormularioResultadoDiligencia.experiencia = "experiência na área técnica de TI ou correlatas"
             if(this.modeloFormularioResultadoDiligencia.cargo == "gp"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI" }
             if(this.modeloFormularioResultadoDiligencia.cargo == "sm"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional na área técnica de TI, sendo 2 anos com desenvolvimento ágil" }
@@ -201,33 +198,32 @@ var app = new Vue({
             if(this.modeloFormularioResultadoDiligencia.cargo == "dados_sr"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 6 anos de experiência profissional com tecnologias de dados e bases de dados, sendo 2 anos com métodos ágeis" }
             if(this.modeloFormularioResultadoDiligencia.cargo == "dados_pl"){ this.modeloFormularioResultadoDiligencia.experiencia  = "mais de 4 anos de experiência profissional com tecnologias de dados e bases de dados" }
             this.modeloEmail.assunto = "RE: Diligência Prévia de Capacidade Técnica";
-            this.modeloEmail.corpo = this.saudacao() + ","
+            this.modeloEmail.corpo = this.saudacao + ","
                       + "<br><br>O resultado da Diligência Prévia de Capacidade Técnica foi \"<b>" + this.modeloFormularioResultadoDiligencia.resultado + "</b>\".<br><br>"
                       + this.modeloFormularioResultadoDiligencia.genero.toUpperCase() + " funcionári" + this.modeloFormularioResultadoDiligencia.genero + " indicad" + this.modeloFormularioResultadoDiligencia.genero
                       + " pela AMcom possui formação superior completa e " + this.modeloFormularioResultadoDiligencia.experiencia
                       + ".<br><br>Observações:<ul><li>"
-                      + this.modeloFormularioResultadoDiligencia.observacao
+                      + this.modeloFormularioResultadoDiligencia.observacao.trim()
                               + "</li></ul><br>";
             if(this.modeloFormularioResultadoDiligencia.genero && this.modeloFormularioResultadoDiligencia.cargo && this.modeloFormularioResultadoDiligencia.resultado){
-              this.email_gerar(this.modeloEmail.assunto, this.modeloEmail.corpo, "none");
+              this.email_gerar("none");
             }
         },
         convite_github_gerar: function () {
-            var assunto = "RE: Acesso GitHub";
-            var corpo = this.saudacao() + ","
+            this.modeloEmail.assunto = "RE: Acesso GitHub";
+            this.modeloEmail.corpo = this.saudacao + ","
                       + "<br><br>Enviado o convite para contribuir na organização do GitHub."
                       + "<br>Quando aceitar, favor, sinalizar para conceder os acessos."
                       + "<br>";
-            this.email_gerar(assunto, corpo, "none");
+            this.email_gerar("none");
         },
-        email_gerar: function (assunto, corpo, cabecalho_display = "block") {
-            document.getElementById("cabecalho").style.display = cabecalho_display;
-            document.getElementById("assunto_email").innerHTML = assunto;
-              document.getElementById("corpo_email").innerHTML = corpo;
-            document.getElementById("resultado").style.display = "block";
-        },
+        email_gerar: function () {
+            this.exibirEmail = true;
+        }
+    },
+    computed: {
         // Define a saudação do e-mail baseado no período do dia
-        saudacao: function () {
+        saudacao()  {
             var d = new Date();
             var horas = d.getHours();
             if     (horas < 12){ return "Bom dia" }
